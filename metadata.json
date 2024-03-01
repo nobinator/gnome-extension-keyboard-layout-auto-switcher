@@ -1,0 +1,8 @@
+{
+  "name": "Keyboard Layout Auto Switcher",
+  "description": "Switches between keyboard layouts based on focused window title",
+  "uuid": "keyboard-layout-auto-switcher@burza.es",
+  "shell-version": [
+    "45"
+  ]
+}
