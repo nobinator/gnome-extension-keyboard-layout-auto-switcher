@@ -15,12 +15,38 @@
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
-import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
+import St from 'gi://St';
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+import {Extension, gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
+import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
-export default class PlainExampleExtension extends Extension {
+export default class KeyboardLayoutAutoSwitcherExtension extends Extension {
+    constructor(metadata) {
+        super(metadata);
+        this.#metadata = metadata;
+    }
+
     enable() {
+        this.indicator = new PanelMenu.Button(0.0, 'autoSwitchingEnabledIndicator', false);
+        const icon = new St.Icon({
+            gicon: Gio.icon_new_for_string(
+                GLib.build_filenamev([
+                    this.#metadata.path,
+                    'input-symbolic.svg',
+                ])
+            ),
+            style_class: 'system-status-icon',
+        });
+        this.indicator.add_child(icon);
+        Main.panel.addToStatusArea(this.uuid, this.indicator);
     }
 
     disable() {
+        this.indicator.destroy();
+        this.indicator = null;
     }
+
+    #metadata;
 }
